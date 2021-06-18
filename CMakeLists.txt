@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-set(PROJECT_NAME imagec)
+set(PROJECT_NAME ImageC)
 project(${PROJECT_NAME})
 
 set(CMAKE_AUTOMOC ON)
@@ -14,6 +14,7 @@ find_package(Qt5 COMPONENTS Core Widgets Gui REQUIRED)
 
 set(SRC_FILES
     main.cpp
+    mainwindow.cpp
 )
 
 set(QT_FORMS
