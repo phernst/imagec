@@ -10,7 +10,15 @@ if(CMAKE_VERSION VERSION_LESS "3.7.0")
     set(CMAKE_INCLUDE_CURRENT_DIR ON)
 endif()
 
+set(LIBTORCH_PATH CACHE PATH "Path to LibTorch directory")
+list(APPEND CMAKE_PREFIX_PATH ${LIBTORCH_PATH})
+
 find_package(Qt5 COMPONENTS Core Widgets Gui REQUIRED)
+find_package(Torch REQUIRED)
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    list(APPEND CMAKE_EXE_LINKER_FLAGS "-fuse-ld=gold")
+endif()
 
 set(SRC_FILES
     main.cpp
@@ -29,4 +37,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt5::Core
     Qt5::Widgets
     Qt5::Gui
+    ${TORCH_LIBRARIES}
 )
