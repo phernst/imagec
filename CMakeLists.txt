@@ -23,9 +23,12 @@ endif()
 set(SRC_FILES
     main.cpp
     mainwindow.cpp
+    image.cpp
+    imagewindow.cpp
 )
 
 set(QT_FORMS
+    imagewindow.ui
 )
 
 set(MOC_FILES
