@@ -7,6 +7,9 @@
 #include <QMenuBar>
 #include <QStatusBar>
 
+#include "imagewindow.h"
+#include "image.h"
+
 MainWindow::MainWindow()
     : textEdit{new QPlainTextEdit}
 {
@@ -27,6 +30,7 @@ void MainWindow::createActions()
     auto* fileMenu = menuBar()->addMenu(tr("&File"));
 
     auto* newFileAction = fileMenu->addAction(tr("&New file"));
+    connect(newFileAction, &QAction::triggered, this, &MainWindow::newFile);
 
     fileMenu->addSeparator();
 
@@ -45,4 +49,11 @@ void MainWindow::createActions()
 void MainWindow::createStatusBar()
 {
     statusBar()->showMessage(tr("Ready"));
+}
+
+void MainWindow::newFile()
+{
+    images.push_back(Image::random());
+    imageWindows.push_back(std::make_unique<ImageWindow>(images.back()));
+    imageWindows.back()->show();
 }

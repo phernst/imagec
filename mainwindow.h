@@ -4,6 +4,10 @@
 #include <QPlainTextEdit>
 #include <QSessionManager>
 #include <string>
+#include <vector>
+
+#include "image.h"
+#include "imagewindow.h"
 
 class MainWindow : public QMainWindow
 {
@@ -11,6 +15,7 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow();
+    virtual ~MainWindow() = default;
 
     // void loadFile(const std::string& fileName);
 
@@ -18,7 +23,7 @@ public:
 //     void closeEvent(QCloseEvent* event) override;
 
 private slots:
-//     void newFile();
+    void newFile();
 //     void open();
 //     bool save();
 //     bool saveAs();
@@ -40,4 +45,6 @@ private:
 
     QPlainTextEdit* textEdit;
     std::string curFile;
+    std::vector<Image> images;
+    std::vector<std::unique_ptr<ImageWindow>> imageWindows;
 };
