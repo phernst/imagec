@@ -2,7 +2,8 @@
 
 #include <QWidget>
 #include <memory>
-#include "image.h"
+
+class Image;
 
 namespace Ui
 {
@@ -13,9 +14,9 @@ class ImageWindow : public QWidget
 {
 public:
     explicit ImageWindow(const Image&);
-    virtual ~ImageWindow();
+    virtual ~ImageWindow() = default;
 
 private:
-    Ui::ImageWindow* ui;
+    std::unique_ptr<Ui::ImageWindow> ui;
     const Image& image;
 };
