@@ -7,7 +7,6 @@
 #include <vector>
 
 #include "image.h"
-#include "imagewindow.h"
 
 class MainWindow : public QMainWindow
 {
@@ -45,6 +44,5 @@ private:
 
     QPlainTextEdit* textEdit;
     std::string curFile;
-    std::vector<Image> images;
-    std::vector<std::unique_ptr<ImageWindow>> imageWindows;
+    std::vector<std::unique_ptr<Image>> images;
 };
