@@ -14,9 +14,9 @@ class ImageWindow : public QWidget
 {
 public:
     explicit ImageWindow(const Image&);
-    virtual ~ImageWindow() = default;
+    virtual ~ImageWindow();
 
 private:
-    std::unique_ptr<Ui::ImageWindow> ui;
+    Ui::ImageWindow* ui;
     const Image& image;
 };
