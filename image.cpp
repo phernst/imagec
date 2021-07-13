@@ -1,7 +1,9 @@
 #include "image.h"
 #include "ui_imagewindow.h"
 
+#undef slots
 #include <torch/torch.h>
+#define slots Q_SLOTS
 #include <QSlider>
 #include <QImage>
 #include <QPixmap>
@@ -34,7 +36,12 @@ Image::Image(torch::Tensor data, std::unordered_map<std::string, std::string> me
         }
     }
     auto scene = new QGraphicsScene{this};
-    viewSection = QPixmap::fromImage(QImage{sliceData.data(), sliceIterator.size(1), sliceIterator.size(0), sizeof(uchar) * sliceIterator.size(1), QImage::Format_Grayscale8});
+    viewSection = QPixmap::fromImage(QImage{
+        sliceData.data(),
+        static_cast<int>(sliceIterator.size(1)),
+        static_cast<int>(sliceIterator.size(0)),
+        static_cast<int>(sizeof(uchar) * sliceIterator.size(1)),
+        QImage::Format_Grayscale8});
     scene->addPixmap(viewSection);
     ui->graphicsView->setScene(scene);
 }
