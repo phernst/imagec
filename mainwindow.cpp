@@ -45,6 +45,11 @@ void MainWindow::createActions()
     aboutQtAction->setStatusTip(tr("Show the Qt library's About Box"));
 }
 
+void MainWindow::closeEvent(QCloseEvent* event)
+{
+    clearImages();
+}
+
 void MainWindow::createStatusBar()
 {
     statusBar()->showMessage(tr("Ready"));
@@ -54,4 +59,9 @@ void MainWindow::newFile()
 {
     images.push_back(Image::random());
     images.back()->show();
+}
+
+void MainWindow::clearImages()
+{
+    images.clear();
 }

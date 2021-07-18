@@ -18,8 +18,8 @@ public:
 
     // void loadFile(const std::string& fileName);
 
-// protected:
-//     void closeEvent(QCloseEvent* event) override;
+protected:
+    void closeEvent(QCloseEvent* event) override;
 
 private slots:
     void newFile();
@@ -35,6 +35,7 @@ private slots:
 private:
     void createActions();
     void createStatusBar();
+    void clearImages();
     // void readSettings();
     // void writeSettings();
     // bool maybeSave();
