@@ -4,24 +4,18 @@
 #undef slots
 #include <torch/torch.h>
 #define slots Q_SLOTS
-#include <QSlider>
+#include <QScrollBar>
 #include <QImage>
 #include <QPixmap>
 #include <QGraphicsScene>
 
-Image::Image(torch::Tensor data, std::unordered_map<std::string, std::string> meta)
-    : ui{new Ui::ImageWindow}
+Image::Image(torch::Tensor data, std::unordered_map<std::string, std::string> meta, QWidget* parent)
+    : QWidget(parent)
+    , ui{new Ui::ImageWindow}
     , data {data}
     , meta {meta}
 {
     ui->setupUi(this);
-
-    // add sliders for dimension number >2
-    const auto dimNum = data.sizes().size();
-    for(int i = 0; i < dimNum - 2; ++i)
-    {
-        ui->verticalLayout->addWidget(new QSlider{Qt::Orientation::Horizontal, this});
-    }
 
     // show image
     using namespace torch::indexing;
@@ -35,15 +29,30 @@ Image::Image(torch::Tensor data, std::unordered_map<std::string, std::string> me
             sliceData.push_back(static_cast<uchar>(sliceIterator[i][j] * 255));
         }
     }
-    auto scene = new QGraphicsScene{this};
+    auto scene = new QGraphicsScene{};
     viewSection = QPixmap::fromImage(QImage{
-        sliceData.data(),
+        static_cast<const uchar*>(sliceData.data()),
         static_cast<int>(sliceIterator.size(1)),
         static_cast<int>(sliceIterator.size(0)),
         static_cast<int>(sizeof(uchar) * sliceIterator.size(1)),
         QImage::Format_Grayscale8});
     scene->addPixmap(viewSection);
+    ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
+    ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
     ui->graphicsView->setScene(scene);
+    resize(ui->graphicsView->sizeHint());
+
+    // add sliders for dimension number >2
+    const auto dimNum = data.sizes().size();
+    for(int i = 0; i < dimNum - 2; ++i)
+    {
+        auto slider = new QScrollBar{Qt::Orientation::Horizontal, this};
+        slider->setPageStep(1);
+        slider->setMinimum(1);
+        slider->setMaximum(data.sizes()[i + 2]);
+        resize(width(), height() + slider->sizeHint().height() + ui->verticalLayout->spacing());
+        ui->verticalLayout->addWidget(slider);
+    }
 }
 
 Image::~Image()
@@ -51,7 +60,7 @@ Image::~Image()
     delete ui;
 }
 
-std::unique_ptr<Image> Image::random()
+std::unique_ptr<Image> Image::random(QWidget* parent)
 {
-    return std::make_unique<Image>(torch::rand({256, 256, 256, 2}), std::unordered_map<std::string, std::string>{});
+    return std::make_unique<Image>(torch::rand({256, 256, 256, 2}), std::unordered_map<std::string, std::string>{}, parent);
 }

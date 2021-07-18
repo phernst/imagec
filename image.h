@@ -16,10 +16,10 @@ class ImageWindow;
 class Image : public QWidget
 {
 public:
-    Image(torch::Tensor, std::unordered_map<std::string, std::string>);
+    Image(torch::Tensor, std::unordered_map<std::string, std::string>, QWidget* parent = nullptr);
     virtual ~Image();
 
-    static std::unique_ptr<Image> random();
+    static std::unique_ptr<Image> random(QWidget* parent = nullptr);
 
 private:
     Ui::ImageWindow* ui;
