@@ -21,17 +21,16 @@ Image::Image(torch::Tensor data, std::unordered_map<std::string, std::string> me
     using namespace torch::indexing;
     auto imageSlice = data.index({Slice{}, Slice{}, 0, 0});
     auto sliceIterator = imageSlice.accessor<float,2>();
-    auto sliceData = std::vector<uchar>{};
     for(int i = 0; i < sliceIterator.size(0); ++i)
     {
         for(int j = 0; j < sliceIterator.size(1); ++j)
         {
-            sliceData.push_back(static_cast<uchar>(sliceIterator[i][j] * 255));
+            viewBuffer.push_back(static_cast<uchar>(sliceIterator[i][j] * 255));
         }
     }
     auto scene = new QGraphicsScene{};
-    viewSection = QPixmap::fromImage(QImage{
-        static_cast<const uchar*>(sliceData.data()),
+    auto viewSection = QPixmap::fromImage(QImage{
+        static_cast<const uchar*>(viewBuffer.data()),
         static_cast<int>(sliceIterator.size(1)),
         static_cast<int>(sliceIterator.size(0)),
         static_cast<int>(sizeof(uchar) * sliceIterator.size(1)),
@@ -62,5 +61,5 @@ Image::~Image()
 
 std::unique_ptr<Image> Image::random(QWidget* parent)
 {
-    return std::make_unique<Image>(torch::rand({256, 256, 256, 2}), std::unordered_map<std::string, std::string>{}, parent);
+    return std::make_unique<Image>(torch::rand({256, 256, 16, 2}), std::unordered_map<std::string, std::string>{}, parent);
 }

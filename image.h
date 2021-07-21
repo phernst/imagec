@@ -25,5 +25,5 @@ private:
     Ui::ImageWindow* ui;
     torch::Tensor data;
     std::unordered_map<std::string, std::string> meta;
-    QPixmap viewSection;
+    std::vector<uchar> viewBuffer;
 };

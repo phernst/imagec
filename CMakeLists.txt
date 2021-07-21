@@ -14,6 +14,7 @@ set(LIBTORCH_PATH CACHE PATH "Path to LibTorch directory")
 list(APPEND CMAKE_PREFIX_PATH ${LIBTORCH_PATH})
 
 find_package(Qt5 COMPONENTS Core Widgets Gui REQUIRED)
+find_package(ITK REQUIRED)
 find_package(Torch REQUIRED)
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
@@ -40,6 +41,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt5::Widgets
     Qt5::Gui
     ${TORCH_LIBRARIES}
+    ${ITK_LIBRARIES}
 )
 
 # The following code block is suggested to be used on Windows.
