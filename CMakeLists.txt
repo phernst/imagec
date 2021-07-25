@@ -15,6 +15,7 @@ list(APPEND CMAKE_PREFIX_PATH ${LIBTORCH_PATH})
 
 find_package(Qt5 COMPONENTS Core Widgets Gui REQUIRED)
 find_package(ITK REQUIRED)
+include(${ITK_USE_FILE})
 find_package(Torch REQUIRED)
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")

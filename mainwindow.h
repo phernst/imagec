@@ -23,6 +23,7 @@ protected:
 
 private slots:
     void newFile();
+    void openFile();
 //     void open();
 //     bool save();
 //     bool saveAs();
