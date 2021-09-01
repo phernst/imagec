@@ -19,7 +19,8 @@ include(${ITK_USE_FILE})
 find_package(Torch REQUIRED)
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    list(APPEND CMAKE_EXE_LINKER_FLAGS "-fuse-ld=gold")
+    # list(APPEND CMAKE_EXE_LINKER_FLAGS "-fuse-ld=gold")
+    set(CMAKE_EXE_LINKER_FLAGS "-fuse-ld=gold")
 endif()
 
 set(SRC_FILES

@@ -76,19 +76,18 @@ void MainWindow::openFile()
     auto io = itk::JPEGImageIO::New();
 
     auto extensions = io->GetSupportedReadExtensions();
-    std::transform(extensions.cbegin(), extensions.cend(), extensions.begin(), [](const auto& ext) {
-        auto lowerExt = ext;
-        std::transform(lowerExt.cbegin(), lowerExt.cend(), lowerExt.begin(), std::tolower);
-        return lowerExt;
+    std::transform(extensions.cbegin(), extensions.cend(), extensions.begin(), [](auto ext) {
+        std::transform(ext.cbegin(), ext.cend(), ext.begin(), [](unsigned char c) { return std::tolower(c); });
+        return ext;
     });
     const auto extensions_set = std::unordered_set(extensions.cbegin(), extensions.cend());
     auto fileDialogFilter = std::stringstream{};
     fileDialogFilter << "JPEG files (";
     for(int i = 0; i < extensions_set.size() - 1; ++i)
     {
-        fileDialogFilter << "*" << *std::next(extensions_set.cbegin(), i) << " ";
+        fileDialogFilter << "*" << *std::next(extensions_set.cbegin(), i) << ", ";
     }
-    fileDialogFilter << "*" << *std::prev(extensions_set.cend(), 1) << ")";
+    fileDialogFilter << "*" << *std::next(extensions_set.cbegin(), extensions_set.size() - 1) << ")";
     auto fileName = QFileDialog::getOpenFileName(
         this,
         tr("Open JPEG"),
