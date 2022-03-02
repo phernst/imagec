@@ -61,7 +61,8 @@ void Image::updateDisplayedSlice()
     {
         currentSliceIndices.push_back(dimensionScrollbars[i]->value() - 1);
     }
-    const auto imageSlice = data.index(currentSliceIndices).to(torch::kUInt8);
+    const auto dataSlice = data.index(currentSliceIndices);
+    const auto imageSlice = ((dataSlice-0)/(500-0)*255).clip(0, 255).to(torch::kUInt8);
     const auto sliceIterator = imageSlice.accessor<uchar,2>();
     viewBuffer.clear();
     for(int i = 0; i < sliceIterator.size(0); ++i)
