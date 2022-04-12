@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config version="1.0">
+    <folder name="Analysis">
+        <plugin name="Analysis 1" path=""/>
+        <separator/>
+        <plugin name="Analysis 2" path=""/>
+        <folder name="Separator">
+            <separator/>
+        </folder>
+        <plugin name="Analysis 3" path=""/>
+    </folder>
+    <folder name="Processing">
+        <plugin name="Threshold" path=""/>
+    </folder>
+</config>

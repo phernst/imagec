@@ -35,6 +35,8 @@ private slots:
 
 private:
     void createActions();
+    void createBasicActions();
+    void createDynamicActions();
     void createStatusBar();
     void clearImages();
     // void readSettings();

@@ -7,16 +7,16 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QStatusBar>
-// #include <itkImageIOBase.h>
 #include <itkImageFileReader.h>
-#include <itkNiftiImageIO.h>
 #undef slots
 #include <torch/torch.h>
 #define slots Q_SLOTS
 #include <unordered_set>
 #include <sstream>
+#include <filesystem>
 
 #include "image.h"
+#include "configreader.h"
 
 MainWindow::MainWindow()
     : textEdit{new QPlainTextEdit}
@@ -34,6 +34,12 @@ void MainWindow::about()
 }
 
 void MainWindow::createActions()
+{
+    createBasicActions();
+    createDynamicActions();
+}
+
+void MainWindow::createBasicActions()
 {
     auto* fileMenu = menuBar()->addMenu(tr("&File"));
 
@@ -55,6 +61,20 @@ void MainWindow::createActions()
 
     auto* aboutQtAction = helpMenu->addAction(tr("About &Qt"), qApp, &QApplication::aboutQt);
     aboutQtAction->setStatusTip(tr("Show the Qt library's About Box"));
+}
+
+void MainWindow::createDynamicActions()
+{
+    const auto fileName = "config.xml";
+    QFile file(fileName);
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+        QMessageBox::warning(this, tr("QXmlStream Bookmarks"),
+                             tr("Cannot read file %1:\n%2.")
+                             .arg(QDir::toNativeSeparators(fileName),
+                                  file.errorString()));
+        return;
+    }
+    ConfigReader{nullptr}.read(&file);
 }
 
 void MainWindow::closeEvent(QCloseEvent* event)
@@ -121,7 +141,7 @@ void MainWindow::openFile()
     std::cout << width << " " << height << " " << numComponents;
     std::cout << " " << fileSize << " " << depth << '\n';
     std::cout << "component type: " << imageIO->GetComponentType() << '\n';
-    
+
     // needed for nifty files
     itk::ImageIORegion ioRegion{3};
     ioRegion.SetIndex(0, 0);
@@ -131,7 +151,7 @@ void MainWindow::openFile()
     ioRegion.SetSize(1, 256);  // todo: dynamically
     ioRegion.SetSize(2, 150);  // todo: dynamically
     imageIO->SetIORegion(ioRegion);
-    
+
     // read data
     auto fileData = std::vector<char>{};
     fileData.reserve(fileSize);

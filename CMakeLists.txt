@@ -27,6 +27,7 @@ set(SRC_FILES
     main.cpp
     mainwindow.cpp
     image.cpp
+    configreader.cpp
 )
 
 set(QT_FORMS
