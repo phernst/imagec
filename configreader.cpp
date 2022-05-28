@@ -41,11 +41,11 @@ void ConfigReader::readConfig()
 
     while (xml.readNextStartElement()) {
         if (xml.name() == QLatin1String("folder"))
-            readFolder(0);
-        else if (xml.name() == QLatin1String("plugin"))
-            readPlugin(0);
-        else if (xml.name() == QLatin1String("separator"))
-            readSeparator(0);
+            readFolder(menuBar);
+        // else if (xml.name() == QLatin1String("plugin"))
+        //     readPlugin(0);
+        // else if (xml.name() == QLatin1String("separator"))
+        //     readSeparator(0);
         else
             xml.skipCurrentElement();
     }
@@ -62,6 +62,7 @@ void ConfigReader::readPlugin(QMenu* item)
     // item->setText(0, pluginName);
     std::cout << "Plugin: " << pluginName.toStdString() << std::endl;
     xml.skipCurrentElement();
+    item->addAction(pluginName);
 }
 //! [4]
 
@@ -75,15 +76,18 @@ void ConfigReader::readSeparator(QMenu* item)
     // separator->setText(0, QString(30, 0xB7));
     std::cout << "Separator" << std::endl;
     xml.skipCurrentElement();
+    item->addSeparator();
 }
 //! [5]
 
-void ConfigReader::readFolder(QMenu* item)
+template<class T>
+void ConfigReader::readFolder(T* item)
 {
     Q_ASSERT(xml.isStartElement() && xml.name() == QLatin1String("folder"));
 
-    QMenu* folder = nullptr;
-    std::cout << "Folder: " << xml.attributes().value("name").toString().toStdString() << std::endl;
+    const auto folderName = xml.attributes().value("name").toString();
+    QMenu* folder = item->addMenu(folderName);
+    std::cout << "Folder: " << folderName.toStdString() << std::endl;
     // QMenu* folder = createChildItem(item);
     // bool folded = (xml.attributes().value(foldedAttribute()) != QLatin1String("no"));
     // folder->setExpanded(!folded);

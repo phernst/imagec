@@ -74,7 +74,7 @@ void MainWindow::createDynamicActions()
                                   file.errorString()));
         return;
     }
-    ConfigReader{nullptr}.read(&file);
+    ConfigReader{menuBar()}.read(&file);
 }
 
 void MainWindow::closeEvent(QCloseEvent* event)

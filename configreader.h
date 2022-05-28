@@ -18,7 +18,9 @@ private:
     void readConfig();
     void readPlugin(QMenu* item);
     void readSeparator(QMenu* item);
-    void readFolder(QMenu* item);
+
+    template<class T>
+    void readFolder(T* item);
 
     QXmlStreamReader xml;
 
