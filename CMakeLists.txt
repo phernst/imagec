@@ -13,7 +13,7 @@ endif()
 set(LIBTORCH_PATH CACHE PATH "Path to LibTorch directory")
 list(APPEND CMAKE_PREFIX_PATH ${LIBTORCH_PATH})
 
-find_package(Qt5 COMPONENTS Core Widgets Gui REQUIRED)
+find_package(Qt6 COMPONENTS Core Widgets Gui REQUIRED)
 find_package(ITK REQUIRED)
 include(${ITK_USE_FILE})
 find_package(Torch REQUIRED)
@@ -40,9 +40,9 @@ set(MOC_FILES
 add_executable(${PROJECT_NAME} ${SRC_FILES} ${QT_FORMS} ${MOC_FILES})
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)
 target_link_libraries(${PROJECT_NAME} PRIVATE
-    Qt5::Core
-    Qt5::Widgets
-    Qt5::Gui
+    Qt6::Core
+    Qt6::Widgets
+    Qt6::Gui
     ${TORCH_LIBRARIES}
     ${ITK_LIBRARIES}
 )
